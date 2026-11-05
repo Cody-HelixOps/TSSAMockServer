@@ -5,14 +5,14 @@
 //   PowerShell:  $env:GITHUB_TOKEN = '<token>'; node tools/publish-to-github.js
 //   macOS/Linux: GITHUB_TOKEN=<token> node tools/publish-to-github.js
 // The token needs the "repo" scope (classic), or Administration, Contents and Pages write (fine-grained).
-// Options: --name <repo> (default mock-tssa), --private (GitHub Pages then needs a paid plan).
+// Options: --name <repo> (default TSSAMockServer), --private (GitHub Pages then needs a paid plan).
 const { spawnSync } = require('child_process');
 const path = require('path');
 
 const token = process.env.GITHUB_TOKEN;
 if (!token) { console.error('Set GITHUB_TOKEN first.'); process.exit(1); }
 const flag = (name) => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : null; };
-const repo = flag('--name') || 'mock-tssa';
+const repo = flag('--name') || 'TSSAMockServer';
 const isPrivate = process.argv.includes('--private');
 const root = path.join(__dirname, '..');
 

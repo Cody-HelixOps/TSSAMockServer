@@ -15,7 +15,7 @@ The first run downloads `cloudflared`, starts the mock and opens `http://localho
 Host Name to enter in HAC. Press Ctrl+C there to stop. Default sign-in: `BLAdmin`, role `BLAdmins`, password
 `password`.
 
-The [project site](https://cody-helixops.github.io/mock-tssa/) has a walkthrough and a status table.
+The [project site](https://cody-helixops.github.io/TSSAMockServer/) has a walkthrough and a status table.
 
 ## About
 
