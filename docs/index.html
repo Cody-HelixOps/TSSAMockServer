@@ -94,13 +94,30 @@ footer { margin-top: 40px; padding: 24px 0 48px; border-top: 1px solid var(--lin
 
   <section id="hac">
     <h2>Connect Helix Automation Console</h2>
+    <p>Configure the connector in HAC first, then download and run it. Use a sandbox or demo tenant: the mock's 24 fake servers are added to whatever assets HAC already has.</p>
     <ol>
-      <li>Download the <b>Server Automation Connector</b> from your HAC tenant and start it.</li>
-      <li>In HAC, set the connector's <b>Host Name</b> to the host the start window shows, and <b>Application Port</b> to <code>443</code>.</li>
-      <li>Sign in with user <code>BLAdmin</code>, role <code>BLAdmins</code> and password <code>password</code>. These are test values for the mock only.</li>
+      <li>Start the mock and note the <b>Host Name</b> in its window.</li>
+      <li>In HAC, go to <b>Configuration &gt; Connectors</b> and click <b>Add a Connector</b>.</li>
+      <li>Choose the <b>Server Automation Connector</b> type and click <b>Create</b>.</li>
+      <li>Fill in the values below and save.</li>
+      <li>Download the connector package HAC gives you and unzip it on a computer with Java.</li>
+      <li>Run <code>run.bat</code> on Windows, or <code>run.sh</code> on macOS or Linux.</li>
+      <li>Check that the connector shows <b>Running</b> under Configuration &gt; Connectors.</li>
       <li>Open <b>API Inspector</b> in the mock console to watch every call arrive.</li>
     </ol>
-    <p>The tunnel's address is public while the mock runs, and the mock has default credentials. Use it for test data only, and stop it when you've finished. The tunnel host can change after a restart, in which case update it in HAC.</p>
+    <div class="scroll"><table>
+      <tr><th>HAC field</th><th>Value</th></tr>
+      <tr><td>Truesight Server Automation Host Name</td><td>The Host Name from the mock's window</td></tr>
+      <tr><td>Truesight Server Automation Application Port</td><td><code>443</code> (<code>9843</code> if you're not using the tunnel)</td></tr>
+      <tr><td>Truesight Server Automation Role Name</td><td><code>BLAdmins</code></td></tr>
+      <tr><td>Truesight Server Automation Version</td><td><code>26.3.00.130</code></td></tr>
+      <tr><td>User Name / Password</td><td><code>BLAdmin</code> / <code>password</code> (test values for the mock only)</td></tr>
+      <tr><td>Role</td><td><code>BLAdmins</code></td></tr>
+      <tr><td>Authentication Method</td><td>Secure Remote Password</td></tr>
+      <tr><td>Collection Mode</td><td><code>10</code> minutes</td></tr>
+    </table></div>
+    <p>Already have a connector? Open its <b>Action</b> menu, choose <b>Edit</b>, enter these values and click <b>Update</b>. Write down the old values first so you can switch back.</p>
+    <p>The tunnel's address is public while the mock runs, and the mock has default credentials. Use it for test data only, and stop it when you've finished. The tunnel host can change after a restart. If it does, change <b>Host Name</b> with <b>Action &gt; Edit</b>, restart the connector and click <b>Update</b>.</p>
   </section>
 
   <section id="tour">

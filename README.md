@@ -159,8 +159,8 @@ node test/smoke.js https://localhost:9843
 The on-prem `tssa-connector` (Java) makes outbound HTTPS calls to the TSSA application server, so
 the mock only needs to be reachable **from the connector host** on port 9843.
 
-1. **Choose where to run the mock.** The simplest option is the connector host itself (in your
-   tenant that is `EC2AMAZ-NCG7RNE`). Any VM the connector can reach also works.
+1. **Choose where to run the mock.** The simplest option is the connector host itself. Any VM the
+   connector can reach also works.
 2. **Open the port** if you run it on a different host (elevated PowerShell):
    ```powershell
    New-NetFirewallRule -DisplayName "Mock TSSA 9843" -Direction Inbound -Protocol TCP -LocalPort 9843 -Action Allow
@@ -177,8 +177,10 @@ the mock only needs to be reachable **from the connector host** on port 9843.
    ```powershell
    keytool -importcert -noprompt -alias mock-tssa -file certs\mock-tssa.crt -keystore "<JAVA_HOME>\lib\security\cacerts" -storepass changeit
    ```
-5. **Fill in the connector in HAC.** Go to **Configuration → Connectors → Server Automation
-   Connector → Edit**:
+5. **Configure the connector in HAC, before you download or run it.** Go to **Configuration →
+   Connectors → Add a Connector**, choose the Server Automation Connector type and click **Create**.
+   For a connector that already exists, use **Action → Edit** instead. With a Cloudflare tunnel, the
+   Host Name is the tunnel host and the port is `443`:
 
    | HAC field | Value |
    |---|---|
@@ -192,13 +194,15 @@ the mock only needs to be reachable **from the connector host** on port 9843.
    | TSSA Properties | e.g. `ENVIRONMENT,APPLICATION,LOCATION,SUPPLIER` |
    | Collection Mode | `5` minutes or more |
 
-6. **Watch it connect.** Open the console's **API Inspector**. Every call the connector makes
-   shows up there.
+6. **Download and run the connector.** Unzip the package HAC gives you for this connector on a
+   machine with Java, then run `run.bat` (Windows) or `run.sh` (macOS or Linux).
+7. **Watch it connect.** The connector shows **Running** under Configuration → Connectors. Open the
+   console's **API Inspector**. Every call the connector makes shows up there.
 
 > ⚠️ **Re-pointing an existing connector.** BMC documents that switching the TSSA connector to an
 > application server that is not part of the same load balancer or DR set **duplicates asset data**
 > in HAC. The mock's 24 `*.mock.lab` servers, patches and jobs will be added alongside whatever the
-> real TSSA (`WIN-APP`) already sent. Use a sandbox or demo tenant, or accept the extra mock
+> real TSSA already sent. Use a sandbox or demo tenant, or accept the extra mock
 > assets. Note the current connector settings before you change them so you can switch back.
 
 ### Job callbacks (catalog sync)
