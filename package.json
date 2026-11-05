@@ -1,0 +1,16 @@
+{
+  "name": "mock-tssa",
+  "version": "1.0.0",
+  "description": "Mock TrueSight Server Automation (TSSA) application server for testing the BMC Helix Automation Console tssa-connector",
+  "main": "server.js",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "reset": "node server.js --reset",
+    "smoke": "node test/smoke.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "UNLICENSED"
+}

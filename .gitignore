@@ -1,0 +1,12 @@
+# Created at run time. data/ holds tenant data, sessions and logs; certs/ holds a private key.
+data/
+certs/
+bin/
+*.log
+*.tgz
+.env*
+tssa-capture/
+node_modules/
+
+# Local notes about a specific tenant
+HAC-connector-original-settings.md

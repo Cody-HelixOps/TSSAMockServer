@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock TSSA</title>
+<meta name="description" content="An unofficial mock TrueSight Server Automation server for testing BMC Helix Automation Console without a real TSSA install.">
+<style>
+:root {
+  --bg: #f6f7f9; --panel: #fff; --ink: #1d2330; --muted: #5d6675; --line: #e1e5ec; --accent: #c2410c; --accent-ink: #fff;
+  --code: #eef1f5; --ok: #14733a; --warn: #8a5a00; --bad: #b42318;
+  --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #12161d; --panel: #1a2029; --ink: #e6e9ef; --muted: #9aa4b2; --line: #2b333f; --accent: #fb923c; --accent-ink: #1a1206;
+    --code: #232b36; --ok: #4ac26b; --warn: #e3b341; --bad: #f47067; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 0 16px; }
+header { padding: 56px 0 32px; border-bottom: 1px solid var(--line); }
+h1 { font-size: 2.4rem; line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.02em; }
+.lead { font-size: 1.15rem; color: var(--muted); margin: 0 0 24px; max-width: 62ch; }
+.note { font-size: .9rem; color: var(--muted); margin: 16px 0 0; }
+.btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-block; padding: 10px 18px; border-radius: 8px; font-weight: 600; text-decoration: none; border: 1px solid var(--line); color: var(--ink); background: var(--panel); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+nav { display: flex; flex-wrap: wrap; gap: 4px 18px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: .95rem; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover { color: var(--ink); }
+section { padding: 32px 0 8px; }
+h2 { font-size: 1.5rem; margin: 0 0 12px; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; margin: 22px 0 6px; }
+a { color: var(--accent); }
+code { font-family: var(--mono); font-size: .9em; background: var(--code); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
+pre { background: var(--code); padding: 12px 14px; border-radius: 8px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px; }
+.card h3 { margin-top: 0; }
+.card ol { margin: 0; padding-left: 20px; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; background: var(--panel); border: 1px solid var(--line); font-size: .95rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .85rem; color: var(--muted); }
+.ok { color: var(--ok); font-weight: 600; white-space: nowrap; }
+.part { color: var(--warn); font-weight: 600; white-space: nowrap; }
+.no { color: var(--bad); font-weight: 600; white-space: nowrap; }
+footer { margin-top: 40px; padding: 24px 0 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <h1>Mock TSSA</h1>
+    <p class="lead">A stand-in TrueSight Server Automation server you run on your own computer, so you can demo and test BMC Helix Automation Console without a real TSSA install.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/Cody-HelixOps/mock-tssa/archive/refs/heads/main.zip">Download ZIP</a>
+      <a class="btn" href="https://github.com/Cody-HelixOps/mock-tssa">View on GitHub</a>
+    </div>
+    <p class="note">Unofficial community test tool. Not made, endorsed or supported by BMC. It contains fake servers and fake data, and doesn't manage anything real.</p>
+  </div>
+</header>
+<div class="wrap">
+  <nav>
+    <a href="#start">Quick start</a><a href="#hac">Connect HAC</a><a href="#tour">What you can do</a><a href="#status">What works</a><a href="#autosync">Auto-Sync</a><a href="#options">Options</a><a href="#trouble">Troubleshooting</a>
+  </nav>
+
+  <section id="start">
+    <h2>Quick start</h2>
+    <p>You need <a href="https://nodejs.org">Node.js 18 or later</a>. Nothing else has to be installed by hand.</p>
+    <div class="cols">
+      <div class="card">
+        <h3>Windows</h3>
+        <ol>
+          <li>Download the ZIP and unzip it.</li>
+          <li>Double-click <code>start-windows.bat</code>.</li>
+          <li>If SmartScreen appears, choose <b>More info</b>, then <b>Run anyway</b>.</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>macOS</h3>
+        <ol>
+          <li>Download the ZIP and unzip it.</li>
+          <li>Control-click <code>start-macos.command</code>, choose <b>Open</b>, then confirm.</li>
+          <li>If that's blocked, open Terminal in the folder and run <code>bash start-macos.command</code>.</li>
+        </ol>
+      </div>
+    </div>
+    <p>The first run downloads <code>cloudflared</code> from Cloudflare, starts the mock and opens the console at <code>http://localhost:9842</code>. The window then shows the host name to give HAC. Press <b>Ctrl+C</b> in that window to stop.</p>
+    <p>To run it locally with no tunnel and no download:</p>
+    <pre><code>node start.js --no-tunnel</code></pre>
+  </section>
+
+  <section id="hac">
+    <h2>Connect Helix Automation Console</h2>
+    <ol>
+      <li>Download the <b>Server Automation Connector</b> from your HAC tenant and start it.</li>
+      <li>In HAC, set the connector's <b>Host Name</b> to the host the start window shows, and <b>Application Port</b> to <code>443</code>.</li>
+      <li>Sign in with user <code>BLAdmin</code>, role <code>BLAdmins</code> and password <code>password</code>. These are test values for the mock only.</li>
+      <li>Open <b>API Inspector</b> in the mock console to watch every call arrive.</li>
+    </ol>
+    <p>The tunnel's address is public while the mock runs, and the mock has default credentials. Use it for test data only, and stop it when you've finished. The tunnel host can change after a restart, in which case update it in HAC.</p>
+  </section>
+
+  <section id="tour">
+    <h2>What you can do</h2>
+    <h3>Patch policies</h3>
+    <p>Under <b>Manage &gt; Patch Policies</b>, use <b>Execute Now</b>, wait for the run, then click <b>Sync</b>. HAC shows the scan run, asset status, logs and the dashboard's Patch tab. Create a remediation operation to install patches.</p>
+    <h3>Compliance</h3>
+    <p>Under <b>Manage &gt; Compliance Scan Policies</b>, create a policy from a template such as <code>CIS - Windows Server 2022</code>, then Execute Now and Sync. You get asset rule counts, each asset's rules, logs and the dashboard's Compliance tab.</p>
+    <p>To fix findings, select the policy on the Compliance tab and click <b>Remediate</b>. After that operation runs, a new scan shows those servers as compliant. <b>Undo compliance remediation</b> under Settings in the mock console resets this for the next demo.</p>
+    <h3>Ad hoc jobs</h3>
+    <p>Under <b>Operations &gt; Create Operation &gt; Adhoc Job Selections</b>, pick from 15 NSH script jobs, 7 deploy jobs and 5 batch jobs. HAC schedules Execute Now about 90 seconds ahead.</p>
+    <h3>The mock console</h3>
+    <p>Browse servers, depot content, catalogs, jobs and live job logs. Under Settings you can change run speed and the failure rate, or reset all data.</p>
+  </section>
+
+  <section id="status">
+    <h2>What works</h2>
+    <div class="scroll"><table>
+      <tr><th>Area</th><th>Status</th><th>Notes</th></tr>
+      <tr><td>Patch scan, results, logs, dashboard</td><td class="ok">Works</td><td>Needs Sync after each run. HAC gets at most 250 patch rows per run.</td></tr>
+      <tr><td>Patch remediation operations</td><td class="ok">Works</td><td>Really removes the patches from the mock's data.</td></tr>
+      <tr><td>Compliance scans and dashboard</td><td class="ok">Works</td><td>An asset's rule list shows sample rules, so it won't match the full counts.</td></tr>
+      <tr><td>Compliance remediation</td><td class="ok">Works</td><td>Tested through HAC's Remediate flow.</td></tr>
+      <tr><td>Ad hoc NSH and batch operations</td><td class="ok">Works</td><td>Batch results appear under each member job.</td></tr>
+      <tr><td>Ad hoc deploy operations</td><td class="part">Partly</td><td>They create and run, but Sync fails, so HAC stays at Awaiting Execution.</td></tr>
+      <tr><td>Per-host patch counts</td><td class="no">Shows 0</td><td>The asset table's Missing and Installed columns stay 0. Open an asset to see its patches.</td></tr>
+      <tr><td>Daily, weekly and monthly schedules</td><td class="no">Not run</td><td>They save and display, but only one-time schedules and Execute Now run.</td></tr>
+      <tr><td>Automatic results without Sync</td><td class="no">Not yet</td><td>HAC rejects the run-finished callback. Auto-Sync below is the workaround.</td></tr>
+    </table></div>
+    <p class="note">Tested on Windows against one HAC 26.3 tenant. The macOS launcher hasn't been run on a Mac yet.</p>
+  </section>
+
+  <section id="autosync">
+    <h2>Auto-Sync</h2>
+    <p>HAC doesn't show a run's results until someone clicks Sync. The <b>HAC Auto-Sync</b> page in the mock console gives you a script to paste into the browser console of a signed-in HAC tab. It calls Sync every 30 seconds while that tab stays open, and stops after 8 hours. If your HAC session expires, reload HAC and paste it again.</p>
+  </section>
+
+  <section id="options">
+    <h2>Options</h2>
+    <div class="scroll"><table>
+      <tr><th>Setting</th><th>Default</th><th>What it does</th></tr>
+      <tr><td><code>MOCK_HTTP_PORT</code></td><td><code>9842</code></td><td>Console port</td></tr>
+      <tr><td><code>MOCK_HTTPS_PORT</code></td><td><code>9843</code></td><td>TSSA API port</td></tr>
+      <tr><td><code>MOCK_TUNNEL</code></td><td><code>cloudflare</code></td><td><code>off</code> disables the tunnel</td></tr>
+      <tr><td><code>MOCK_TUNNEL_TOKEN</code></td><td>none</td><td>Use a named Cloudflare tunnel, which keeps a fixed host</td></tr>
+      <tr><td><code>MOCK_CONNECTOR_ZIP</code></td><td>newest in Downloads</td><td>Connector zip for the built-in Helix worker</td></tr>
+    </table></div>
+    <p>The <a href="https://github.com/Cody-HelixOps/mock-tssa#readme">README</a> has every setting and the full list of API shapes HAC expects.</p>
+  </section>
+
+  <section id="trouble">
+    <h2>Troubleshooting</h2>
+    <h3>"Node.js is required"</h3>
+    <p>Install the LTS version from <a href="https://nodejs.org">nodejs.org</a>, then start again.</p>
+    <h3>HAC can't reach the mock</h3>
+    <p>VPNs can block the tunnel. Run <code>node server.js --stop-tunnel</code>, start the mock again, and enter the new host in HAC.</p>
+    <h3>A run finished but HAC shows nothing</h3>
+    <p>Click <b>Sync</b>, or use Auto-Sync. If a compliance Sync fails, HAC keeps that run's partial data, so start a new run.</p>
+    <h3>Start over</h3>
+    <p>Use <b>Settings &gt; Reset all data</b> in the mock console.</p>
+  </section>
+
+  <footer>Mock TSSA is an independent test tool. BMC, TrueSight and Helix are trademarks of their owners and are named here only to describe what it works with.</footer>
+</div>
+</body>
+</html>
