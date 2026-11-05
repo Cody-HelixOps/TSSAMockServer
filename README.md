@@ -119,7 +119,6 @@ The mock has three built-in users. Users you add in **Settings** are merged with
 |---|---|---|
 | `BLAdmin` | `BLAdmins`, `RBACAdmins` | `password` |
 | `HACService` | `BLAdmins` | `password` |
-| `Liam` | `BLAdmins` | `password` |
 
 - `POST /rest/api/v1/sessions` with `"authentication_type": "RSSO"` succeeds for any configured user without checking the password, because RSSO carries an SSO token the mock does not validate. With strict auth on, unknown RSSO users are rejected.
 - With strict auth off, a session id the mock never issued (16+ characters of letters, digits, `_` or `-`) is accepted as `BLAdmin`/`BLAdmins` instead of returning `401`. The HAC connector caches session ids and validates them with `GET /rest/api/v1/sessions`.
